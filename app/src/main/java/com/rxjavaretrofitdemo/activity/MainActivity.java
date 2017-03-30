@@ -4,19 +4,23 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.rxjavaretrofitdemo.http.MovieService;
 import com.rxjavaretrofitdemo.R;
 import com.rxjavaretrofitdemo.entity.MovieEntity;
+import com.rxjavaretrofitdemo.http.MovieService;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -24,6 +28,8 @@ public class MainActivity extends AppCompatActivity {
     Button button;
     @BindView(R.id.textView)
     TextView textView;
+
+    private static final String TAG = "MainActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,21 +49,35 @@ public class MainActivity extends AppCompatActivity {
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(baseUrl)
-                .addConverterFactory(GsonConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create()) // 添加Gson转换器
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create()) // 添加rx适配器
                 .build();
 
         MovieService movieService = retrofit.create(MovieService.class);
-        Call<MovieEntity> call = movieService.getTopMovie(0, 10);
-        call.enqueue(new Callback<MovieEntity>() {
-            @Override
-            public void onResponse(Call<MovieEntity> call, Response<MovieEntity> response) {
-                textView.setText(response.body().toString());
-            }
 
-            @Override
-            public void onFailure(Call<MovieEntity> call, Throwable t) {
-                textView.setText(t.getMessage());
-            }
-        });
+        movieService.getTopMovie(0, 10)
+                .subscribeOn(Schedulers.io())   // 指定 subscribe() 发生在 IO 线程
+                .observeOn(AndroidSchedulers.mainThread())  // 指定 Subscriber 的回调发生在主线程
+                .subscribe(new Observer<MovieEntity>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(MovieEntity movieEntity) {
+                        textView.setText(movieEntity.toString());
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        textView.setText(e.getMessage());
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        Toast.makeText(MainActivity.this, "Get Top Movie Completed", Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 }
