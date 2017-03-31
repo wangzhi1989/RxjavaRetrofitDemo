@@ -1,6 +1,7 @@
 package com.rxjavaretrofitdemo.http;
 
 import com.rxjavaretrofitdemo.entity.MovieEntity;
+import com.rxjavaretrofitdemo.entity.Subject;
 
 import io.reactivex.Observable;
 import retrofit2.http.GET;
@@ -15,6 +16,6 @@ public interface MovieService {
 //    Call<MovieEntity> getTopMovie(@Query("start") int start, @Query("count") int count);
 
     @GET("top250")
-    Observable<MovieEntity> getTopMovie(@Query("start") int start, @Query("count") int count);
+    Observable<MovieEntity<Subject>> getTopMovie(@Query("start") int start, @Query("count") int count);
 
 }

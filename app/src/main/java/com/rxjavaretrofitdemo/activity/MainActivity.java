@@ -64,6 +64,6 @@ public class MainActivity extends AppCompatActivity {
 
         };
 
-        HttpMethods.getInstance().getTopMovie(observer,0,10);
+        HttpMethods.getInstance().getTopMovie(observer, 0, 10);
     }
 }

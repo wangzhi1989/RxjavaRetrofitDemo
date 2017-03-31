@@ -1,12 +1,15 @@
 package com.rxjavaretrofitdemo.entity;
 
+import java.io.Serializable;
+
 /**
  * Created by Administrator on 2017/3/29.
  * https://api.douban.com/v2/movie/top250?start=0&count=10
  */
 
-public class MovieEntity<T> {
+public class MovieEntity<T> implements Serializable{
 
+    // 用来模仿resultCode和resultMessage
     private String count;
     private String start;
     private String total;

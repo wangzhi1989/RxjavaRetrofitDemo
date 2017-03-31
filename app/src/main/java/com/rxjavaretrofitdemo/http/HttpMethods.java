@@ -1,11 +1,16 @@
 package com.rxjavaretrofitdemo.http;
 
+
+import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -22,20 +27,28 @@ public class HttpMethods {
     private Retrofit retrofit;
     private MovieService movieService;
 
+    // 手动创建一个OkHttpClient并设置超时时间
+    private static OkHttpClient httpClient = new OkHttpClient.Builder()
+            .addInterceptor(new Interceptor() {
+                @Override
+                public Response intercept(Chain chain) throws IOException {
+                    Request.Builder builder = chain.request().newBuilder();
+                    builder.addHeader("token", "abc");
+                    return chain.proceed(builder.build());
+                }
+            })
+            .connectTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS)
+            .readTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS)
+            .build();
+
     // 构造方法私有
     private HttpMethods() {
-        // 手动创建一个OkHttpClient并设置超时时间
-        OkHttpClient.Builder httpClientBuilder = new OkHttpClient.Builder();
-        httpClientBuilder.connectTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS);
-
         retrofit = new Retrofit.Builder()
-                .client(httpClientBuilder.build())
+                .client(httpClient)
                 .addConverterFactory(GsonConverterFactory.create()) // 添加Gson转换器
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())  // 添加RxJava2适配器
                 .baseUrl(BASEURL)
                 .build();
-
-        movieService = retrofit.create(MovieService.class);
     }
 
     public void getTopMovie(Observer observer, int start, int count) {
@@ -54,4 +67,21 @@ public class HttpMethods {
     public static HttpMethods getInstance() {
         return SingletonHolder.INSTANCE;
     }
+
+    /**
+     * 用来统一处理Http的resultCode,并将HttpResult的Data部分剥离出来返回给subscriber
+     *
+     * @param <T> Subscriber真正需要的数据类型，也就是Data部分的数据类型
+     */
+//    private class HttpResultFunc<T> implements Func1<HttpResult<T>, T>{
+//
+//        @Override
+//        public T call(HttpResult<T> httpResult) {
+//            if (httpResult.getResultCode() != 0) {
+//                throw new ApiException(httpResult.getResultCode());
+//            }
+//            return httpResult.getData();
+//        }
+//    }
+
 }

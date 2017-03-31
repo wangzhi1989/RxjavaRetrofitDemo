@@ -1,60 +1,13 @@
 package com.rxjavaretrofitdemo.entity;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by Administrator on 2017/3/30.
  */
 
-public class Subject {
-
-//    "rating": {"max": 10,
-//                "average": 9.6,
-//                "stars": "50",
-//                "min": 0},
-//    "genres": ["\u72af\u7f6a", "\u5267\u60c5"],
-//    "title": "\u8096\u7533\u514b\u7684\u6551\u8d4e",
-//    "casts": [
-//        {"alt": "https:\/\/movie.douban.com\/celebrity\/1054521\/",
-//         "avatars": {"small": "https://img3.doubanio.com\/img\/celebrity\/small\/17525.jpg",
-//                     "large": "https://img3.doubanio.com\/img\/celebrity\/large\/17525.jpg",
-//                    "medium": "https://img3.doubanio.com\/img\/celebrity\/medium\/17525.jpg"},
-//         "name": "\u8482\u59c6\u00b7\u7f57\u5bbe\u65af",
-//         "id": "1054521"},
-//    {"alt": "https:\/\/movie.douban.com\/celebrity\/1054534\/",
-//                "avatars": {
-//            "small": "https://img3.doubanio.com\/img\/celebrity\/small\/34642.jpg",
-//                    "large": "https://img3.doubanio.com\/img\/celebrity\/large\/34642.jpg",
-//                    "medium": "https://img3.doubanio.com\/img\/celebrity\/medium\/34642.jpg"
-//        },
-//        "name": "\u6469\u6839\u00b7\u5f17\u91cc\u66fc",
-//                "id": "1054534"
-//    },
-//    {"alt": "https:\/\/movie.douban.com\/celebrity\/1041179\/",
-//                "avatars": {
-//            "small": "https://img1.doubanio.com\/img\/celebrity\/small\/5837.jpg",
-//                    "large": "https://img1.doubanio.com\/img\/celebrity\/large\/5837.jpg",
-//                    "medium": "https://img1.doubanio.com\/img\/celebrity\/medium\/5837.jpg"
-//        },
-//        "name": "\u9c8d\u52c3\u00b7\u5188\u987f",
-//                "id": "1041179"
-//    }],
-//    "collect_count": 1045201,
-//    "original_title": "The Shawshank Redemption",
-//    "subtype": "movie",
-//    "directors": [
-//        {"alt": "https:\/\/movie.douban.com\/celebrity\/1047973\/",
-//            "avatars": {"small": "https://img3.doubanio.com\/img\/celebrity\/small\/230.jpg",
-//                "large": "https://img3.doubanio.com\/img\/celebrity\/large\/230.jpg",
-//                "medium": "https://img3.doubanio.com\/img\/celebrity\/medium\/230.jpg"},
-//        "name": "\u5f17\u5170\u514b\u00b7\u5fb7\u62c9\u90a6\u7279",
-//        "id": "1047973"}],
-//    "year": "1994",
-//    "images": {"small": "https://img3.doubanio.com\/view\/movie_poster_cover\/ipst\/public\/p480747492.webp",
-//                "large": "https://img3.doubanio.com\/view\/movie_poster_cover\/lpst\/public\/p480747492.webp",
-//                "medium": "https://img3.doubanio.com\/view\/movie_poster_cover\/spst\/public\/p480747492.webp"},
-//    "alt": "https:\/\/movie.douban.com\/subject\/1292052\/",
-//    "id": "1292052"
+public class Subject implements Serializable{
 
     private String id;
     private String alt;
